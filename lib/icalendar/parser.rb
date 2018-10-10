@@ -101,11 +101,11 @@ module Icalendar
     def parse_component(component)
       while (fields = next_fields)
         if fields[:name] == 'end'
-          klass_name = fields[:value].gsub(/\AV/, '').downcase.capitalize
+          klass_name = fields[:value].gsub(/\AV/, '').underscore.capitalize
           TimezoneStore.store(component) if klass_name == 'Timezone'
           break
         elsif fields[:name] == 'begin'
-          klass_name = fields[:value].gsub(/\AV/, '').downcase.capitalize
+          klass_name = fields[:value].gsub(/\AV/, '').underscore.capitalize
           Icalendar.logger.debug "Adding component #{klass_name}"
           if Icalendar.const_defined? klass_name
             component.add_component parse_component(Icalendar.const_get(klass_name).new)
